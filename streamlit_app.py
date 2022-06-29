@@ -64,15 +64,16 @@ This Streamlit app showcases how data filters can be created and used for fast
 data exploration.
 You may chose any columns in the dataset to create slicers that subset the
 data based on user input. The type of slicer is chosen based on the data type.
-For numeric columns, data can be filtered with a range slider.
-For all other data types, a multiselect box is created.
+Numeric and date columns can be filtered with a range slider.
+For object and category data types, a multiselect box is created.
 
 In addition, for any subset that cannot be obtained through simple slicers,
 you may specify an arbitrary query which will be interpreted with
 `pd.DataFrame.query`.
 
 *The code behind this app is discussed in detail on
-[samproell.io](https://www.samproell.io) (post coming soon!).*
+[samproell.io](https://www.samproell.io/posts/datascience/adhoc-data-filters-streamlit/)
+(post coming soon!).*
 """
 
 # ==================================================================== #
@@ -96,10 +97,10 @@ filters = {}
 with st.sidebar.expander("Filters", expanded=True):
     for col in filter_cols:
         selection = create_slicer(data, col)
-        if selection is not None:  # skip unrecognized column types
+        if selection:  # skip unrecognized column types and empty selections
             filters[col] = selection
 
-    query = st.text_area("Custom query") or "tuple()"
+    query = st.text_area("Custom query") or "tuple()"  # selects all rows
 
 # ==================================================================== #
 #                         FILTER APPLICATION                           #
